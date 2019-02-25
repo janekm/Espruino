@@ -85,17 +85,20 @@ static void hardware_init(void)
 {
     set_led_state(false, false);
 
+    /*
     bool polarity = (BTN1_ONSTATE==1) ^ ((pinInfo[BTN1_PININDEX].port&JSH_PIN_NEGATED)!=0);
     nrf_gpio_cfg_sense_input(pinInfo[BTN1_PININDEX].pin,
             polarity ? NRF_GPIO_PIN_PULLDOWN : NRF_GPIO_PIN_PULLUP,
             polarity ? NRF_GPIO_PIN_SENSE_HIGH : NRF_GPIO_PIN_SENSE_LOW);
+            */
+    nrf_gpio_cfg_sense_input(29, NRF_GPIO_PIN_PULLUP, NRF_GPIO_PIN_SENSE_LOW);
 }
 
 static bool get_btn_state()
 {
-  bool state = nrf_gpio_pin_read(pinInfo[BTN1_PININDEX].pin);
-  if (pinInfo[BTN1_PININDEX].port&JSH_PIN_NEGATED) state=!state;
-  return state == BTN1_ONSTATE;
+  bool state = nrf_gpio_pin_read(29);
+  //if (pinInfo[BTN1_PININDEX].port&JSH_PIN_NEGATED) state=!state;
+  return state == 0;
 }
 
 extern void dfu_set_status(DFUStatus status) {
@@ -117,10 +120,12 @@ extern void dfu_set_status(DFUStatus status) {
 // Override Weak version
 bool nrf_dfu_enter_check(void) {
     bool dfu_start = get_btn_state();
+    //dfu_start = false;
 
     // If button is held down for 3 seconds, don't start bootloader.
     // This means that we go straight to Espruino, where the button is still
     // pressed and can be used to stop execution of the sent code.
+    /*
     if (dfu_start) {
       lcd_init();
       lcd_print("BOOTLOADER\r\n");
@@ -139,8 +144,10 @@ bool nrf_dfu_enter_check(void) {
         lcd_print("\r\nDFU STARTED\r\n");
       set_led_state(true, true);
     }
+    */
 
     return dfu_start;
+    //return true;
 }
 
 

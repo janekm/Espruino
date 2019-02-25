@@ -568,6 +568,8 @@ ifdef USE_NFC
   TARGETSOURCES    += $(NRF5X_SDK_PATH)/components/nfc/ndef/generic/message/nfc_ndef_msg.c
   TARGETSOURCES    += $(NRF5X_SDK_PATH)/components/nfc/ndef/generic/record/nfc_ndef_record.c
   TARGETSOURCES    += $(NRF5X_SDK_PATH)/components/nfc/t2t_lib/hal_t2t/hal_nfc_t2t.c
+else
+  DEFINES += -DCONFIG_NFCT_PINS_AS_GPIOS=1 
 endif
 
 ifdef USE_WIO_LTE
